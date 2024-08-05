@@ -1,13 +1,7 @@
 import { ReactNode } from 'react';
 import { create } from 'zustand';
 
-type ModalType =
-  | 'confirm'
-  | 'error'
-  | 'userConfirm'
-  | 'setting'
-  | 'addDevice'
-  | null;
+type ModalType = 'confirm' | 'error' | 'userConfirm' | null;
 
 interface ModalState {
   isOpen: boolean;
