@@ -3,7 +3,6 @@ import { useModalStore } from '@/store/modalStore';
 import ConfirmModal from '@/components/modal/ConfirmModal';
 import ErrorModal from '@/components/modal/ErrorModal';
 import UserConfirmModal from '@/components/modal/UserConfirmModal';
-import healthCheck from '@/api/test/healthCheck';
 import { SignupForm } from '@/components/test/SignUpForm';
 import LoginForm from '@/components/test/LoginForm';
 
@@ -11,11 +10,6 @@ export default function Main() {
   const { isOpen, modalType } = useModalStore();
   const [isLogin, setIsLogin] = useState(true);
   const [userEmail, setUserEmail] = useState('');
-
-  const handleHealthCheck = async () => {
-    const response = await healthCheck();
-    console.log(response);
-  };
 
   const handleSignupSuccess = () => {
     setIsLogin(true);
