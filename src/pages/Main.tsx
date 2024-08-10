@@ -1,46 +1,76 @@
-import { useState } from 'react';
-import { useModalStore } from '@/store/modalStore';
-import ConfirmModal from '@/components/modal/ConfirmModal';
-import ErrorModal from '@/components/modal/ErrorModal';
-import UserConfirmModal from '@/components/modal/UserConfirmModal';
-import { SignupForm } from '@/components/test/SignUpForm';
-import LoginForm from '@/components/test/LoginForm';
+import { useRef, useState } from 'react';
 
 export default function Main() {
-  const { isOpen, modalType } = useModalStore();
-  const [isLogin, setIsLogin] = useState(true);
-  const [userEmail, setUserEmail] = useState('');
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [photoData, setPhotoData] = useState<string | null>(null);
 
-  const handleSignupSuccess = () => {
-    setIsLogin(true);
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error('Error accessing camera: ', err);
+    }
   };
 
-  const handleLoginSuccess = (email: string) => {
-    setUserEmail(email);
+  const takePhoto = () => {
+    if (canvasRef.current && videoRef.current) {
+      const context = canvasRef.current.getContext('2d');
+      if (context) {
+        context.drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+        const data = canvasRef.current.toDataURL('image/png');
+        setPhotoData(data);
+      }
+    }
   };
 
   return (
-    <div className="w-screen h-screen flex flex-row p-30pxr">
-      <div className="w-full h-full flex flex-col">
-        {userEmail ? (
-          <h2>{userEmail}님 환영합니다.</h2>
-        ) : isLogin ? (
-          <>
-            <LoginForm onSuccess={handleLoginSuccess} />
-            <button onClick={() => setIsLogin(false)}>회원가입하기</button>
-          </>
-        ) : (
-          <>
-            <SignupForm onSuccess={handleSignupSuccess} />
-            <button onClick={() => setIsLogin(true)}>
-              로그인으로 돌아가기
-            </button>
-          </>
+    <div className="w-screen h-screen flex flex-row justify-center items-center">
+      <div className="flex flex-col items-center">
+        <button
+          onClick={startCamera}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Start Camera
+        </button>
+        <video
+          ref={videoRef}
+          autoPlay
+          className="mt-4"
+          style={{ width: '100%', maxWidth: '640px', display: 'block' }}
+        />
+        <button
+          onClick={takePhoto}
+          className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+        >
+          Take Photo
+        </button>
+        <canvas
+          ref={canvasRef}
+          style={{ display: 'none' }}
+          width="640"
+          height="480"
+        />
+        {photoData && (
+          <div className="mt-4">
+            <h2 className="text-lg font-semibold">Photo Taken:</h2>
+            <img
+              src={photoData}
+              alt="Captured"
+              className="mt-2 border rounded"
+            />
+          </div>
         )}
       </div>
-      {isOpen && modalType === 'confirm' && <ConfirmModal />}
-      {isOpen && modalType === 'error' && <ErrorModal />}
-      {isOpen && modalType === 'userConfirm' && <UserConfirmModal />}
     </div>
   );
 }
