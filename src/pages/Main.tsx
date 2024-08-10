@@ -7,7 +7,9 @@ export default function Main() {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: 'environment' } }, // 후방 카메라 사용 설정
+      });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
