@@ -1,3 +1,4 @@
+import { Text } from '@/components/common/Text';
 import { useState } from 'react';
 
 export default function Main() {
@@ -17,6 +18,9 @@ export default function Main() {
   return (
     <div className="w-screen h-screen flex flex-row justify-center items-center">
       <div className="flex flex-col items-center">
+        <Text fontSize={16} fontWeight={500}>
+          테스트
+        </Text>
         <input
           type="file"
           accept="image/*"
