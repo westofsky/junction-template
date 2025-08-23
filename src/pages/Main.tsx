@@ -1,52 +1,20 @@
-import { Text } from '@/components/common/Text';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from '@/assets/icons/logo.png';
 
 export default function Main() {
-  const [photoData, setPhotoData] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoData(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     navigate('/dashboard');
+  //   }, 1000);
+
+  //   return () => clearTimeout(timer);
+  // }, [navigate]);
 
   return (
-    <div className="w-screen h-screen flex flex-row justify-center items-center">
-      <div className="flex flex-col items-center">
-        <Text fontSize={16} fontWeight={500}>
-          테스트
-        </Text>
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleCapture}
-          className="hidden"
-          id="cameraInput"
-        />
-        <label
-          htmlFor="cameraInput"
-          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-        >
-          Open Camera
-        </label>
-        {photoData && (
-          <div className="mt-4">
-            <h2 className="text-lg font-semibold">Photo Taken:</h2>
-            <img
-              src={photoData}
-              alt="Captured"
-              className="mt-2 border rounded"
-              style={{ maxWidth: '100%', height: 'auto' }}
-            />
-          </div>
-        )}
-      </div>
+    <div className="w-screen h-screen flex flex-col items-center bg-[#FCF8F5]">
+      <img src={logo} alt="Logo" className="w-249pxr h-auto mt-249pxr" />
     </div>
   );
 }

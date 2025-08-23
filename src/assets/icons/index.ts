@@ -1,1 +1,1 @@
-// export { ReactComponent as IconName } from './icon_name.svg';
+export { ReactComponent as ArrowRight } from './ArrowRight.svg';
